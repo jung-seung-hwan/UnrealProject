@@ -37,6 +37,8 @@ public:
 private:
 	void HandleWorldInitialized(UWorld* InWorld, const UWorld::InitializationValues InInitializationValues);
 
+	void TryRegisterGameServer(UWorld* InWorld);
+
 	void SendGameServerRegistration();
 
 	FString GetWebServerHost() const;

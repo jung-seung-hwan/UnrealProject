@@ -87,6 +87,24 @@ void UWebApiSubsystem::HandleWorldInitialized(UWorld* InWorld,
 		return;
 	}
 
+	// OnPostWorldInitialization can run before the ?Listen net driver is ready.
+	// Check once now and once more when the world actually begins play.
+	TWeakObjectPtr<UWorld> WeakWorld(InWorld);
+	InWorld->OnWorldBeginPlay.AddWeakLambda(this, [this, WeakWorld]()
+	{
+		TryRegisterGameServer(WeakWorld.Get());
+	});
+
+	TryRegisterGameServer(InWorld);
+}
+
+void UWebApiSubsystem::TryRegisterGameServer(UWorld* InWorld)
+{
+	if (!IsValid(InWorld))
+	{
+		return;
+	}
+
 	const ENetMode NetMode = InWorld->GetNetMode();
 	if (NetMode != NM_DedicatedServer && NetMode != NM_ListenServer)
 	{
