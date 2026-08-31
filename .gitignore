@@ -77,4 +77,6 @@ DerivedDataCache/*
 # Python virtual environment
 Server/.venv/
 Server/.env
+Server/.mysql-root.env
+.local-setup/
 __pycache__/
